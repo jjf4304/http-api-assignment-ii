@@ -11,10 +11,10 @@ const respond = (request, response, status, content, contentType) => {
   response.end();
 };
 
-//Serve the index page
+// Serve the index page
 const getIndex = (request, response) => respond(request, response, 200, index, 'text/html');
 
-//Serve the style.css page
+// Serve the style.css page
 const getStyle = (request, response) => respond(request, response, 200, style, 'text/css');
 
 module.exports = {
