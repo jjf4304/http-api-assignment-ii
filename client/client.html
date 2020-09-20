@@ -7,6 +7,121 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
   <script type="text/babel">
 
+    //function to handle responses from AJAX requests to the server.
+    //Displays the request response to the content section.
+    //Depending on the resulting status of the request, display different
+    //info. 
+    const handleResponse = (xhr, parseJSON) =>{
+      const content = document.querySelector("#content");
+      content.innerHTML = '';
+
+      const responseTitle = document.createElement('h1');
+      const responseMessage = document.createElement('p'); 
+
+      switch(xhr.status){
+        case 200:
+          responseTitle.textContent = "Success";
+          break;
+        case 201:
+          responseTitle.textContent = "Created";
+          break;
+        case 204:
+          responseTitle.textContent = "Updated";
+          parseJSON = false;
+          break;
+        case 400:
+          responseTitle.textContent = "Bad Request";
+          break;
+        case 404:
+          responseTitle.textContent = "Resource Not Found";
+          break;
+        default:
+          responseTitle.textContent = "Error. Response not implemented.";
+          break;
+      }
+
+      content.appendChild(responseTitle);
+
+      if(parseJSON){
+        const obj = JSON.parse(xhr.response);
+        console.log(obj);
+
+        if(xhr.status === 200)
+          responseMessage.textContent = xhr.response;
+        else
+        responseMessage.textContent = `Message: ${obj.message}`;
+        content.appendChild(responseMessage);
+      }
+
+    };
+    //Function to send a POST request
+    //Gets the relevant user data from the add user form
+    //then sends it through AJAX
+    const sendPost = (e, addUserForm) =>{
+
+      e.preventDefault();
+
+      const userName = document.querySelector('#nameField').value;
+      const userAge = document.querySelector('#ageField').value;
+
+      const xhr = new XMLHttpRequest();
+
+      xhr.open('POST', '/addUser');
+
+      xhr.setRequestHeader('Accept', 'application/json');
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+      xhr.onload = () => handleResponse(xhr, true);
+
+      const userParams = `name=${userName}&age=${userAge}`;
+
+      xhr.send(userParams);
+
+      return false;
+    };
+
+    //Function to send a GET request to the server
+    const requestUpdate = (e, getUserForm) =>{
+
+      e.preventDefault();
+
+      const url = getUserForm.querySelector('#urlField').value;
+      const requestMethod = getUserForm.querySelector('#methodSelect').value;
+
+      const xhr = new XMLHttpRequest();
+
+      xhr.open(requestMethod, url);
+
+      xhr.setRequestHeader("Accept", "application/json");
+
+      if(requestMethod ==='get'){
+        xhr.onload = () => handleResponse(xhr, true);
+      }
+      else{
+        xhr.onload = () => handleResponse(xhr, false);
+      }
+       xhr.send();
+
+      return false;
+    };
+
+    const init = () =>{
+      const addUserForm = document.querySelector('#nameForm');
+
+      //post method
+      const addUser = (e) => sendPost(e, addUserForm);
+
+      const getUserForm = document.querySelector('#userForm');
+
+      //get method
+      const getUsers = (e) => requestUpdate(e, getUserForm);
+
+      addUserForm.addEventListener('submit', addUser);
+      getUserForm.addEventListener('submit', getUsers);
+
+    };
+
+    window.onload = init;
   </script>
 </head>
 <body>

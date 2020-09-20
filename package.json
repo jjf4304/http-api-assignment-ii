@@ -1,0 +1,30 @@
+{
+  "name": "http-api-assignment-ii",
+  "version": "1.0.0",
+  "engines": {
+    "node": "12.16.3",
+    "npm": "6.14.4"
+  },
+  "description": "HTTP Assignment 2 Fredrickson",
+  "main": "./src/server.js",
+  "scripts": {
+    "start": "node ./src/server.js",
+    "pretest": "eslint ./src --fix",
+    "test": "echo \"Tests complete\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jjf4304/http-api-assignment-ii.git"
+  },
+  "author": "Joshua Fredrickson",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/jjf4304/http-api-assignment-ii/issues"
+  },
+  "homepage": "https://github.com/jjf4304/http-api-assignment-ii#readme",
+  "devDependencies": {
+    "eslint": "^7.9.0",
+    "eslint-config-airbnb": "^18.2.0",
+    "eslint-plugin-import": "^2.22.0"
+  }
+}
